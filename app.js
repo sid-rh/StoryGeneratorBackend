@@ -8,9 +8,9 @@ const userRoutes=require('./routes/userRoutes');
 const storyRoutes=require('./routes/storyRoutes');
 
 const app=express();
-app.use(bodyParser.urlencoded({extended:true}));
-app.use(cookieParser());
 app.use(cors({credentials:true}));
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 app.use(express.json());
 dotenv.config();
