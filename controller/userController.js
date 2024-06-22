@@ -116,7 +116,7 @@ const generateToken=async(res,user)=>
       );
     
     res.cookie('jwt',token,{
-        httpOnly:true,
+        httpOnly:false,
         secure:true,
         sameSite:'none',
         maxAge:30*24*60*60*1000
