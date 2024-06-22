@@ -10,7 +10,7 @@ const storyRoutes=require('./routes/storyRoutes');
 const app=express();
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(cookieParser());
-app.use(cors());
+app.use(cors({credentials:true}));
 app.use(bodyParser.json());
 app.use(express.json());
 dotenv.config();
