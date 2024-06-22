@@ -8,7 +8,12 @@ const userRoutes=require('./routes/userRoutes');
 const storyRoutes=require('./routes/storyRoutes');
 
 const app=express();
-app.use(cors({credentials:true}));
+app.use(cors(
+    {
+        credentials:true,
+        origin:["https://storygeneratorfrontend.onrender.com","http://localhost:3000"]
+    }
+));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
