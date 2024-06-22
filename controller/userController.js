@@ -59,7 +59,7 @@ const login=async(req,res)=>
                 // console.log(token);
                 await generateToken(res,user);
                 // await User.updateOne({ _id: user._id },);
-                res.status(200).send({user:user});
+                res.status(200).send({user:user,token:res.cookie.token});
             }
             else
             {
@@ -89,7 +89,7 @@ const logout=async(req,res)=>{
     //   { upsert: true },
     // );
     res.cookie('jwt','',{
-        httpOnly:true,
+        httpOnly:false,
         expiresIn:new Date(0),
     })
 
