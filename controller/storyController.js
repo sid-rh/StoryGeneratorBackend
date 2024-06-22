@@ -5,37 +5,44 @@ const bcrypt=require('bcrypt');
 const dotenv=require('dotenv');
 const jwt=require('jsonwebtoken');
 const Story=require('../models/story');
-const openai=require('../openai/config');
+const openai=require('../openai/config');     
+const gemini=require('../gemini/config');
 
 dotenv.config();
 
 const generateStory=async(req,res)=>{
     try {
-        const prompt=req.body.prompt;
-        
-        const response=await openai.chat.completions.create({
-            model:'gpt-3.5-turbo',
-            messages:[
-                {
-                    role: "system",
-                    content: "You are a helpful assistant that generates short stories.",
-                  },
-                  {
-                    role: "user",
-                    content: `Generate a short story of 50 words which starts with: "${prompt}", 
-                            return the title at the end of the story, ensure that the title is separated by "Title:"`,
-                  },
+        const storyPrompt=req.body.prompt;
 
-            ],
+        const prompt=`Generate a short story of 50 words which starts with: "${storyPrompt}", 
+                      return the title at the end of the story, ensure that the title is separated by "Title:"`;
+        
+        // const response=await openai.chat.completions.create({
+        //     model:'gpt-3.5-turbo',
+        //     messages:[
+        //         {
+        //             role: "system",
+        //             content: "You are a helpful assistant that generates short stories.",
+        //           },
+        //           {
+        //             role: "user",
+        //             content: `Generate a short story of 50 words which starts with: "${storyPrompt}", 
+        //                     return the title at the end of the story, ensure that the title is separated by "Title:"`,
+        //           },
+
+        //     ],
            
-            max_tokens:150,
-            top_p:1,
-            temperature:0.5,
-            frequency_penalty:0,
-            presence_penalty:0,
-        });
+        //     max_tokens:150,
+        //     top_p:1,
+        //     temperature:0.5,
+        //     frequency_penalty:0,
+        //     presence_penalty:0,
+        // });
+        const result=await gemini.generateContent(prompt);
+        const response=await result.response;
+        const story=response.text();
         const separator = "Title:";
-        const story = response.choices[0].message.content;
+        // const story = response.choices[0].message.content;
         console.log(story);
 
         const parts = story.split(separator);
@@ -46,7 +53,6 @@ const generateStory=async(req,res)=>{
       
             return res.status(200).json({ message: "Working", title, content });
           } else {
-            // If the separator is not found, you can handle it accordingly
             return res
               .status(400)
               .json({ error: "Separator not found in generated story" });
