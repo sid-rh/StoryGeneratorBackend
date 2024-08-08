@@ -27,7 +27,7 @@ dotenv.config();
 // }
 const auth=async(req,res,next)=>{
   let token;
-  console.log(req.cookies);
+  console.log({cookies: req.cookies});
   token=req.cookies.jwt;
 
   if(token)
