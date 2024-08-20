@@ -12,7 +12,7 @@ app.use(cookieParser());
 app.use(cors(
     {
         credentials:true,
-        origin:'*',
+        origin:["https://storygeneratorfrontend.onrender.com","http://localhost:3000"],
     }
 ));
 app.use(bodyParser.urlencoded({extended:true}));
