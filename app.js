@@ -12,7 +12,7 @@ app.use(cookieParser());
 app.use(cors(
     {
         credentials:true,
-        origin:true
+        origin:'*',
     }
 ));
 app.use(bodyParser.urlencoded({extended:true}));
