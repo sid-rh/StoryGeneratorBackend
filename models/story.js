@@ -18,7 +18,7 @@ const storySchema = new mongoose.Schema({
   saves: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   createdAt: {
     type: Date,
-    default: Date.now, // Set the default value to the current date and time
+    default: Date.now, 
   },
   editedAt:{
     type:Date,

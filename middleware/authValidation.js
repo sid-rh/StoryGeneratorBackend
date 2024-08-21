@@ -10,7 +10,6 @@ const validateRegistration = [
     .isLength({ min: 6 })
     .withMessage('Password must be at least 6 characters long'),
 
-  // Optional: You can add more validations as needed
 
   // Check for errors
   (req, res, next) => {

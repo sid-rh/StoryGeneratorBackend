@@ -67,7 +67,7 @@ const generateStory=async(req,res)=>{
 const createStory=async(req,res)=>{
     try {
         const { title, content } = req.body;
-        const createdById = req.currentUser._id; // Get the user's ID from authentication
+        const createdById = req.currentUser._id; 
     
         // Create a new story
         const story = new Story({ title, content, createdBy:{_user:createdById} });
@@ -142,7 +142,7 @@ const getAllStories=async(req,res)=>
                   from: 'users', // The name of the User collection
                   localField: 'createdBy._user',
                   foreignField: '_id',
-                  as: 'createdBy.user', // The name of the field to populate with the user document
+                  as: 'createdBy.user', 
                 },
               },
 
@@ -294,9 +294,9 @@ const deleteStory=async(req,res)=>
 {
     try {
         const storyId = req.body.id;
-        const userId = req.user._id; // Get the authenticated user's ID
+        const userId = req.user._id; 
     
-        // Check if the story exists and if the user is the creator of the story
+        
         const story = await Story.findOne({ _id: storyId });
     
         if (!story) {
@@ -320,20 +320,19 @@ const likeStory=async(req,res)=>
 {
     try {
         const storyId = req.body.id;
-        const userId = req.currentUser._id; // Get the authenticated user's ID
+        const userId = req.currentUser._id; 
     
-        // Check if the user has already liked the story
+        
         const existingLike = await Like.findOne({ user: userId, story: storyId });
     
         if (existingLike) {
           return res.status(400).json({ error: 'User already liked this story' });
         }
     
-        // Create a new like
+        
         const like = new Like({ user: userId, story: storyId });
         await like.save();
     
-        // Add the like to the story's likes array
         await Story.findByIdAndUpdate(storyId, { $push: { likes: userId } });
         await User.findByIdAndUpdate(userId,{$push:{likedStories:storyId}});
     
@@ -352,7 +351,6 @@ const unlikeStory=async(req,res)=>
 
         await Like.findOneAndDelete({ user: userId, story: storyId });
 
-    // Remove the like from the story's likes array
     await Story.findByIdAndUpdate(storyId, { $pull: { likes: userId } });
     await User.findByIdAndUpdate(userId,{$pull:{likedStories:storyId}});
 
@@ -368,9 +366,8 @@ const saveStory=async(req,res)=>
 {
     try {
         const storyId = req.body.id;
-        const userId = req.currentUser._id; // Get the authenticated user's ID
-    
-        // Check if the user has already liked the story
+        const userId = req.currentUser._id; 
+  
         const user = await User.findById(userId);
 
         if (!user) {
@@ -381,14 +378,14 @@ const saveStory=async(req,res)=>
     
         user.savedStories = user.savedStories || [];
 
-    // Check if the story's ID is not already in the user's 'savedPosts' array
+    
     if (!user.savedStories.includes(storyId)) {
-      // Add the post ID to the user's 'savedPosts' array
+      
       await Story.findByIdAndUpdate(storyId, { $push: { saves: userId } });
         await User.findByIdAndUpdate(userId,{$push:{savedStories:storyId}});
       res.status(200).json({ message: 'Story saved successfully' });
     } else {
-      // The story is already saved by the user
+      
       res.status(400).json({ message: 'Story is already saved' });
     }
       } catch (error) {
@@ -414,12 +411,12 @@ const unsaveStory=async(req,res)=>{
 
     
     if (user.savedStories.includes(storyId)) {
-      // Add the post ID to the user's 'savedPosts' array
+      
       await Story.findByIdAndUpdate(storyId, { $pull: { saves: userId } });
         await User.findByIdAndUpdate(userId,{$pull:{savedStories:storyId}});
       res.status(200).json({ message: 'Story unsaved successfully' });
     } else {
-      // The story is already saved by the user
+      
       res.status(400).json({ message: 'Story is not saved' });
     }
       } catch (error) {
